@@ -6,13 +6,23 @@ const onClickAdd = () => {
   const inputText = document.getElementById("add-text").value;
   document.getElementById("add-text").value = "";
 
+  createIncompleteList(inputText);
+};
+
+// 未完了リストから指定の要素を削除する
+const deleteFromIncompleteList = (target) => {
+  document.getElementById("incomplete-list").removeChild(target);
+};
+
+// 未完了リストに追加する関数
+const createIncompleteList = (text) => {
   // div生成
   const div = document.createElement("div");
   div.className = "list-row";
 
   // liタグ生成
   const li = document.createElement("li");
-  li.innerText = inputText;
+  li.innerText = text;
 
   // button(完了)タグ生成
   const completeButton = document.createElement("button");
@@ -24,11 +34,19 @@ const onClickAdd = () => {
     addTarget.textContent = null;
     const li = document.createElement("li");
     li.innerText = text;
+
+    // 戻すボタン
     const backButton = document.createElement("button");
     backButton.innerText = "戻す";
+    backButton.addEventListener("click", () => {
+      const deleteTarget = backButton.parentNode;
+      document.getElementById("complete-list").removeChild(deleteTarget);
+      const text = backButton.parentNode.firstElementChild.innerText;
+      createIncompleteList(text);
+    });
+
     addTarget.appendChild(li);
     addTarget.appendChild(backButton);
-    console.log(addTarget);
     document.getElementById("complete-list").appendChild(addTarget);
   });
 
@@ -53,8 +71,3 @@ const onClickAdd = () => {
 document.getElementById("add-button").addEventListener("click", () => {
   onClickAdd();
 });
-
-// 未完了リストから指定の要素を削除する
-const deleteFromIncompleteList = (target) => {
-  document.getElementById("incomplete-list").removeChild(target);
-};
